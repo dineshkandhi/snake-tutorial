@@ -1,6 +1,7 @@
 use piston_window::types::Color;
 use piston_window::*;
 
+
 use rand::{thread_rng, Rng};
 
 use crate::draw::{draw_block, draw_rectangle};
@@ -25,10 +26,12 @@ pub struct Game {
 
     game_over: bool,
     waiting_time: f64,
+    player_name: String,  // New field to store the player name
+    score: usize,         // New field to store the score
 }
 
 impl Game {
-    pub fn new(width: i32, height: i32) -> Game {
+    pub fn new(width: i32, height: i32, player_name: String) -> Game {
         Game {
             snake: Snake::new(2, 2),
             waiting_time: 0.0,
@@ -38,6 +41,8 @@ impl Game {
             width,
             height,
             game_over: false,
+            player_name,  // Initialize the player name
+            score: 0,      // Initialize the score
         }
     }
 
@@ -104,6 +109,7 @@ impl Game {
         if self.food_exists && self.food_x == head_x && self.food_y == head_y {
             self.food_exists = false;
             self.snake.restore_tail();
+            self.score += 1;  // Increase the score when the snake eats food
         }
     }
 
@@ -149,5 +155,17 @@ impl Game {
         self.food_x = 6;
         self.food_y = 4;
         self.game_over = false;
+        self.score = 0;  // Reset the score when restarting
     }
+
+    // New methods to get player name and score
+    pub fn get_player_name(&self) -> &str {
+        &self.player_name
+    }
+
+    pub fn get_score(&self) -> usize {
+        self.score
+    }
+
+   
 }
